@@ -1,0 +1,72 @@
+
+
+-- Liste o nome e o email dos professores.
+select nome, email
+from professores;
+
+-- Liste o nome e carga horária de todas as disciplinas.
+
+select nome, carga_horaria from disciplinas;
+
+-- Liste o nome e a carga horária de todas as disciplinas que já foram cursadas.
+alter table disciplinas add column conclusao char;
+select nome, carga_horaria
+from disciplinas
+where conclusao = 'S';
+
+-- Liste o nome dos professores que ministram disciplinas com carga horária de 80 horas.
+select p.nome, d.carga_horaria
+from professores p, disciplinas d
+where d.id_professor = p.id and d.carga_horaria = 80;
+
+-- Liste as notas da disciplina de Lógica de programação.
+
+select nota 
+from notas n, disciplinas d
+where n.disciplina_id = d.id and d.nome = 'disciplina 1';
+
+-- Liste as disciplinas que ainda não foram cursadas.
+select nome, conclusao
+from disciplinas
+where conclusao = 'N';
+
+-- Retorne o total de horas das disciplinas cursadas.
+select sum(horas_semestre), conclusao 
+from disciplinas
+where conclusao = 'S';
+
+-- Retorne a média de todas as notas de provas.
+select avg(nota) 
+from notas;
+
+-- Liste todos os nomes dos alunos e as disciplinas de cada turma.
+SELECT a.nome, d.nome, t.numero_turma
+FROM Alunos a
+JOIN Matriculas m ON a.id = m.aluno_id
+JOIN Turmas t ON m.turma_id = t.id
+JOIN Disciplinas d ON t.disciplina_id = d.id;
+
+
+select * from alunos;
+select * from turmas;
+select * from disciplinas;
+
+-- Retorne o número de alunos, a disciplina e o nome do professor da turma que possui mais alunos.
+SELECT
+    COUNT(m.aluno_id) AS num_alunos,
+    d.nome AS disciplina,
+    p.nome AS nome_professor
+FROM
+    Matriculas m
+JOIN
+    Turmas t ON m.turma_id = t.id
+JOIN
+    Disciplinas d ON t.disciplina_id = d.id
+JOIN
+    Professores p ON d.id_professor = p.id
+GROUP BY
+    t.id
+ORDER BY
+    num_alunos DESC
+LIMIT 1;
+
